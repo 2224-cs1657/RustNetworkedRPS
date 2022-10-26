@@ -40,6 +40,7 @@ fn main() {
 		Role::Client => {
 		//client_available = true;
 			thread::spawn(|| {
+				// acknowledge client
 				client();
 			});
 		}
@@ -79,6 +80,8 @@ fn battle_robot(){
 /**
  * Host and client can battle
  */
+
+ // using info from server,  battle(host, client)
 fn battle_human(role: Role){
 	//enter your weapon type
 	grab_input();
@@ -229,10 +232,11 @@ fn host() {
 		}
 }
 
-
+// infinitely loop to read the input that is sent
 fn handle_client(mut stream: TcpStream) -> Result<(), Error>{
 	println!("Player 2 connecting from: {}", stream.peer_addr()?);
 	let mut buf = [0;512];
+	// iterate over the reader until recieve an answer
 	loop {
 		let bytes_read = stream.read(&mut buf)?;
 		if bytes_read == 0 {return Ok(())}
